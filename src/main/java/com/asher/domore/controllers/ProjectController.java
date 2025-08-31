@@ -6,7 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.asher.domore.models.Project;
-import com.asher.domore.security.services.ProjectService;
+import com.asher.domore.services.ProjectService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,5 +32,12 @@ public class ProjectController {
 	@PostMapping
 	public Project createProject(@RequestBody Project project) {
 		return projectService.saveProject(project);
+	}
+
+	@GetMapping("/{id}/owner")
+	public ResponseEntity<?> getProjectOwner(@PathVariable Long id) {
+		return projectService.getProjectById(id)
+				.map(project -> ResponseEntity.ok(project.getOwner()))
+				.orElse(ResponseEntity.notFound().build());
 	}
 }

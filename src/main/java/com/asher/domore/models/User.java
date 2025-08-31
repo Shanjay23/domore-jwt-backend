@@ -37,7 +37,6 @@ public class User {
 
 	@NotBlank
 	@Size(max = 120)
-	@JsonIgnore
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)
