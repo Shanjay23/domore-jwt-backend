@@ -19,6 +19,8 @@ import com.asher.domore.security.jwt.AuthEntryPointJwt;
 import com.asher.domore.security.jwt.AuthTokenFilter;
 import com.asher.domore.security.services.UserDetailsServiceImpl;
 
+import java.util.List;
+
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
@@ -51,15 +53,16 @@ public class WebSecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public CorsConfiguration corsConfiguration() {
-		org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-		configuration.setAllowedOrigins(java.util.List.of("*"));
-		configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		configuration.setAllowedHeaders(java.util.List.of("*"));
-		configuration.setAllowCredentials(true);
-		return configuration;
-	}
+    @Bean
+    public CorsConfiguration corsConfiguration() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // frontend URL
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        return configuration;
+    }
+
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

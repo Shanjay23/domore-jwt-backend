@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.asher.domore.models.Task;
-import com.asher.domore.security.services.TaskService;
+import com.asher.domore.services.TaskService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
