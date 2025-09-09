@@ -2,6 +2,11 @@ package com.asher.domore.controllers;
 
 import java.util.List;
 
+import com.asher.domore.dto.TaskDTO;
+import com.asher.domore.models.Project;
+import com.asher.domore.models.User;
+import com.asher.domore.repository.ProjectRepository;
+import com.asher.domore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +21,12 @@ import com.asher.domore.services.TaskService;
 public class TaskController {
 	@Autowired
 	private TaskService taskService;
+
+    @Autowired
+    ProjectRepository projectRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
 	@GetMapping("/{id}")
@@ -35,9 +46,24 @@ public class TaskController {
 		return taskService.getTasksByAssigneeId(assigneeId);
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-	@PostMapping
-	public Task createTask(@RequestBody Task task) {
-		return taskService.saveTask(task);
-	}
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    @PostMapping
+    public ResponseEntity<?> createTask(@RequestBody TaskDTO taskRequest) {
+        User assignee = userRepository.findById(taskRequest.getAssigneeId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (assignee.getProject() == null) {
+            return ResponseEntity.badRequest().body("❌ Assignee has no project assigned");
+        }
+
+        Task task = new Task();
+        task.setTitle(taskRequest.getTitle());
+        task.setDescription(taskRequest.getDescription());
+        task.setAssignee(assignee);
+        task.setProject(assignee.getProject());
+
+        Task saved = taskService.saveTask(task);
+        return ResponseEntity.ok(saved);
+    }
+
 }

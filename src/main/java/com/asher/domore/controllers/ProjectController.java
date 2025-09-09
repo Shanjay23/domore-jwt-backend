@@ -1,5 +1,7 @@
 package com.asher.domore.controllers;
 
+import com.asher.domore.dto.ProjectDTO;
+import com.asher.domore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +14,10 @@ import com.asher.domore.services.ProjectService;
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
+
+    @Autowired
+    UserRepository userRepository;
+
 	@Autowired
 	private ProjectService projectService;
 
@@ -29,10 +35,10 @@ public class ProjectController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping
-	public Project createProject(@RequestBody Project project) {
-		return projectService.saveProject(project);
-	}
+    @PostMapping
+    public Project createProject(@RequestBody ProjectDTO projectRequest) {
+        return projectService.createProject(projectRequest);
+    }
 
 	@GetMapping("/{id}/owner")
 	public ResponseEntity<?> getProjectOwner(@PathVariable Long id) {
