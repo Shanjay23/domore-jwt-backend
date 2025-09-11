@@ -9,10 +9,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -46,6 +43,7 @@ public class User {
 	@ManyToOne
 	@JoinColumn(name = "project_id")
 	@JsonIgnore
+    @EqualsAndHashCode.Exclude
 	private Project project;
 
 	public User() {
