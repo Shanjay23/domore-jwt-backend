@@ -55,14 +55,12 @@ public class ProjectController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-    // ProjectController.java
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/my/members")
     public ResponseEntity<?> getMyProjectMembers(Authentication authentication) {
         // Extract logged-in user details
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = userDetails.getId();
-
         return projectService.getProjectByOwnerId(userId)
                 .map(project -> {
                     Set<UserDTO> memberDTOs = project.getMembers()
@@ -80,7 +78,4 @@ public class ProjectController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptySet()));
 
     }
-
-
-
 }

@@ -19,20 +19,20 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	// @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR') or #id ==
+	// @PreAuthorize("hasRole('ADMIN') or hasRole('TEAMLEAD') or #id ==
 	// authentication.principal.id")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getUser(@PathVariable Long id) {
 		return userService.getUserById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEAMLEAD')")
 	@GetMapping
 	public List<User> getAllUsers() {
 		return userService.getAllUsers();
 	}
 
-	@PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('TEAMLEAD')")
 	@PostMapping
 	public User createUser(@RequestBody User user) {
 		return userService.saveUser(user);
