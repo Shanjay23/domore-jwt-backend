@@ -1,6 +1,7 @@
 package com.asher.domore.controllers;
 
 import com.asher.domore.dto.ProjectDTO;
+import com.asher.domore.dto.ProjectEditDTO;
 import com.asher.domore.dto.UserDTO;
 import com.asher.domore.repository.UserRepository;
 import com.asher.domore.security.services.UserDetailsImpl;
@@ -32,7 +33,7 @@ public class ProjectController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getProject(@PathVariable Long id) {
-		return projectService.getProjectById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return projectService.getProject(id);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -48,7 +49,14 @@ public class ProjectController {
         return projectService.createProject(projectRequest);
     }
 
-	@GetMapping("/{id}/owner")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEAMLEAD')")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProject(@PathVariable Long id, @RequestBody ProjectEditDTO dto) {
+        return projectService.updateProject(id, dto);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEAMLEAD')")
+    @GetMapping("/{id}/owner")
 	public ResponseEntity<?> getProjectOwner(@PathVariable Long id) {
 		return projectService.getProjectById(id)
 				.map(project -> ResponseEntity.ok(project.getOwner()))
@@ -58,7 +66,6 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/my/members")
     public ResponseEntity<?> getMyProjectMembers(Authentication authentication) {
-        // Extract logged-in user details
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = userDetails.getId();
         return projectService.getProjectByOwnerId(userId)
@@ -76,6 +83,5 @@ public class ProjectController {
                     return ResponseEntity.ok(memberDTOs);
                 })
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptySet()));
-
     }
 }

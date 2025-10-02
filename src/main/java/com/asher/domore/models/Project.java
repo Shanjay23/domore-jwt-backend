@@ -1,13 +1,10 @@
 package com.asher.domore.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,13 +26,15 @@ public class Project {
 
 	@OneToOne
 	@JoinColumn(name = "owner_id")
-	@JsonIgnore
+    @JsonBackReference
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
 	private User owner;
 
     @OneToMany(mappedBy = "project")
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<User> members = new HashSet<>();
+
 
 }

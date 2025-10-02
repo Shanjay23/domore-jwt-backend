@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.asher.domore.dto.TaskDTO;
 import com.asher.domore.dto.TaskResponse;
-import com.asher.domore.models.Project;
 import com.asher.domore.models.User;
 import com.asher.domore.repository.ProjectRepository;
 import com.asher.domore.repository.UserRepository;
@@ -32,7 +31,7 @@ public class TaskController {
 	@PreAuthorize("hasRole('ADMIN') or hasRole('TEAMLEAD')")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getTask(@PathVariable Long id) {
-		return taskService.getTaskById(id).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
+		return taskService.getTaskById(id);
 	}
 
 	@PreAuthorize("hasRole('ADMIN') or hasRole('TEAMLEAD')")
@@ -79,6 +78,12 @@ public class TaskController {
 
         Task saved = taskService.saveTask(task);
         return ResponseEntity.ok(saved);
+    }
+
+    @PreAuthorize( "hasRole('ADMIN') or hasRole('TEAMLEAD')" )
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskDTO task){
+        return taskService.updateTask(id, task);
     }
 
 }

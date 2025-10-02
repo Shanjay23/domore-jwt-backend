@@ -48,5 +48,4 @@ public class UserController {
                     .body("Project not found for user ID: " + id);
         }
     }
-
 }

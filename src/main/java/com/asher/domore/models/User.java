@@ -3,8 +3,7 @@ package com.asher.domore.models;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +33,7 @@ public class User {
 
 	@NotBlank
 	@Size(max = 120)
+    @ToString.Exclude
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -42,8 +42,9 @@ public class User {
 
 	@ManyToOne
 	@JoinColumn(name = "project_id")
-	@JsonIgnore
+    @JsonManagedReference
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
 	private Project project;
 
 	public User() {
@@ -54,4 +55,14 @@ public class User {
 		this.email = email;
 		this.password = password;
 	}
+
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                ", email='" + email + '\'' +
+//                ", roles=" + roles +
+//                '}';
+//    }
 }
