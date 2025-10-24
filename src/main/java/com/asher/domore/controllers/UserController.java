@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.asher.domore.models.User;
 import com.asher.domore.services.UserService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

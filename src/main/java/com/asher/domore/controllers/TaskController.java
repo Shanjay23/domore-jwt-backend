@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.asher.domore.models.Task;
 import com.asher.domore.services.TaskService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
